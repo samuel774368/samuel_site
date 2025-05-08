@@ -1,68 +1,75 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Carregar atividades salvas no localStorage
-    carregarAtividades();
-  
-    // Adicionar o evento de clique ao botão de cadastro
-    document.getElementById('cadastrarBtn').addEventListener('click', cadastrarAtividade);
+const nome = document.getElementById("nomeAtividade");
+const descricao = document.getElementById("descricaoAtividade");
+const participantes = document.getElementById("participantesAtividade");
+const lista = document.getElementById("listaAtividades");
+const filtro = document.getElementById("filtro");
+const cadastrarBtn = document.getElementById("cadastrarBtn");
+
+const modal = document.getElementById("modalConfirmacao");
+const confirmar = document.getElementById("confirmarRemocao");
+const cancelar = document.getElementById("cancelarRemocao");
+
+let atividadeParaRemover = null;
+
+cadastrarBtn.addEventListener("click", () => {
+  if (!nome.value || !descricao.value || !participantes.value) return;
+
+  const div = document.createElement("div");
+  div.className = "atividade";
+  div.innerHTML = `
+    <h3>${nome.value}</h3>
+    <p>${descricao.value}</p>
+    <p><strong>Participantes:</strong> ${participantes.value}</p>
+    <button class="botao-remover">Remover</button>
+  `;
+
+  lista.appendChild(div);
+
+  nome.value = "";
+  descricao.value = "";
+  participantes.value = "";
+
+  // Atualizar botão de remoção
+  atualizarRemocao();
+});
+
+filtro.addEventListener("input", () => {
+  const atividades = document.querySelectorAll(".atividade");
+  const termo = filtro.value.toLowerCase();
+
+  atividades.forEach(div => {
+    const texto = div.innerText.toLowerCase();
+    div.style.display = texto.includes(termo) ? "block" : "none";
   });
-  
-  // Função para cadastrar atividade
-  function cadastrarAtividade() {
-    const nome = document.getElementById('nomeAtividade').value.trim();
-    const descricao = document.getElementById('descricaoAtividade').value.trim();
-    const participantes = document.getElementById('participantesAtividade').value.trim();
-  
-    // Validar se todos os campos foram preenchidos
-    if (!nome || !descricao || !participantes) {
-      alert("Por favor, preencha todos os campos!");
-      return;
-    }
-  
-    const novaAtividade = { nome, descricao, participantes };
-    
-    // Salvar atividade no localStorage
-    const atividades = JSON.parse(localStorage.getItem('atividades')) || [];
-    atividades.push(novaAtividade);
-    localStorage.setItem('atividades', JSON.stringify(atividades));
-  
-    // Limpar campos
-    document.getElementById('nomeAtividade').value = '';
-    document.getElementById('descricaoAtividade').value = '';
-    document.getElementById('participantesAtividade').value = '';
-  
-    // Atualizar lista de atividades
-    adicionarAtividadeNaTela(novaAtividade, atividades.length - 1);
+});
+
+function atualizarRemocao() {
+  const botoes = document.querySelectorAll(".botao-remover");
+
+  botoes.forEach(botao => {
+    botao.onclick = () => {
+      atividadeParaRemover = botao.parentElement;
+      modal.style.display = "flex";
+    };
+  });
+}
+
+confirmar.onclick = () => {
+  if (atividadeParaRemover) {
+    atividadeParaRemover.remove();
+    atividadeParaRemover = null;
+    modal.style.display = "none";
   }
-  
-  // Função para exibir atividade na tela
-  function adicionarAtividadeNaTela(atividade, index) {
-    const div = document.createElement('div');
-    div.classList.add('atividade');
-    div.innerHTML = `
-      <h3>${atividade.nome}</h3>
-      <p><strong>Descrição:</strong> ${atividade.descricao}</p>
-      <p><strong>Participantes:</strong> ${atividade.participantes}</p>
-      <button onclick="removerAtividade(${index})" class="botao-remover">Remover</button>
-    `;
-    document.getElementById('listaAtividades').appendChild(div);
-  }
-  
-  // Função para carregar atividades salvas ao iniciar a página
-  function carregarAtividades() {
-    const atividadesSalvas = JSON.parse(localStorage.getItem('atividades')) || [];
-    atividadesSalvas.forEach((atividade, index) => {
-      adicionarAtividadeNaTela(atividade, index);
-    });
-  }
-  
-  // Função para remover atividade
-  function removerAtividade(index) {
-    let atividades = JSON.parse(localStorage.getItem('atividades')) || [];
-    atividades.splice(index, 1); // Remove do array
-    localStorage.setItem('atividades', JSON.stringify(atividades)); // Atualiza o localStorage
-  
-    // Recarregar lista de atividades
-    document.getElementById('listaAtividades').innerHTML = ''; 
-    atividades.forEach((atividade, idx) => adicionarAtividadeNaTela(atividade, idx));
-  }
-  
+};
+
+cancelar.onclick = () => {
+  modal.style.display = "none";
+  atividadeParaRemover = null;
+};
+
+// Modo escuro
+const darkBtn = document.getElementById("darkModeBtn");
+
+darkBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+});
