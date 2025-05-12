@@ -1,20 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciador de Atividades Extracurriculares</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <i class="fas fa-clipboard-list"></i>
+                <h2>Atividades</h2>
+            </div>
+            <div class="menu">
+                <button class="menu-item active">
+                    <i class="fas fa-plus"></i>
+                    <span>Nova Atividade</span>
+                </button>
+                <button class="menu-item">
+                    <i class="fas fa-list"></i>
+                    <span>Todas Atividades</span>
+                </button>
+            </div>
+            <div class="theme-toggle-container">
+                <span>Modo Escuro</span>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </nav>
 
-    <button id="cadastrarBtn"><i class="fas fa-plus-circle"></i> Cadastrar</button>
+        <main class="main-content">
+            <header>
+                <h1>Gerenciador de Atividades</h1>
+            </header>
 
-    <div id="listaAtividades"></div>
-  </div>
+            <div class="content-wrapper">
+                <div class="form-section">
+                    <div class="input-group">
+                        <label for="nomeAtividade">Nome da Atividade</label>
+                        <input type="text" id="nomeAtividade" placeholder="Digite o nome da atividade" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="descricaoAtividade">Descrição</label>
+                        <textarea id="descricaoAtividade" placeholder="Descreva a atividade" required></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="participantesAtividade">Participantes</label>
+                        <input type="text" id="participantesAtividade" placeholder="Nome dos participantes" required>
+                    </div>
 
-  <!-- Modal de confirmação -->
-  <div id="modalConfirmacao" class="modal">
-    <div class="modal-content">
-      <p>Tem certeza que deseja remover esta atividade?</p>
-      <div class="modal-buttons">
-        <button id="confirmarRemocao">Sim</button>
-        <button id="cancelarRemocao">Cancelar</button>
-      </div>
+                    <button id="cadastrarBtn" class="btn-primary">
+                        <i class="fas fa-plus-circle"></i> Adicionar Atividade
+                    </button>
+                </div>
+
+                <div class="filter-section">
+                    <input type="text" id="filtro" placeholder="🔍 Filtrar atividades..." class="filter-input">
+                </div>
+
+                <div id="listaAtividades" class="activities-list"></div>
+            </div>
+        </main>
     </div>
-  </div>
 
-  <script src="script.js"></script>
+    <!-- Modal de Confirmação -->
+    <div id="modalConfirmacao" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-exclamation-triangle warning-icon"></i>
+            <h2>Confirmação de Remoção</h2>
+            <p>Tem certeza que deseja remover esta atividade?</p>
+            <div class="modal-buttons">
+                <button id="cancelarRemocao" class="btn-cancel">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button id="confirmarRemocao" class="btn-confirm">
+                    <i class="fas fa-check"></i> Sim, remover
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
